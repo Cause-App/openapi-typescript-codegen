@@ -55,18 +55,21 @@ import xhrSendRequest from '../templates/core/xhr/sendRequest.hbs';
 import templateExportModel from '../templates/exportModel.hbs';
 import templateExportSchema from '../templates/exportSchema.hbs';
 import templateExportService from '../templates/exportService.hbs';
+import templateExportServerStub from '../templates/exportServerStub.hbs';
 import templateIndex from '../templates/index.hbs';
 import partialBase from '../templates/partials/base.hbs';
 import partialExportComposition from '../templates/partials/exportComposition.hbs';
 import partialExportEnum from '../templates/partials/exportEnum.hbs';
 import partialExportInterface from '../templates/partials/exportInterface.hbs';
 import partialExportType from '../templates/partials/exportType.hbs';
+import partialGetParamFromReq from '../templates/partials/getParamFromReq.hbs';
 import partialHeader from '../templates/partials/header.hbs';
 import partialIsNullable from '../templates/partials/isNullable.hbs';
 import partialIsReadOnly from '../templates/partials/isReadOnly.hbs';
 import partialIsRequired from '../templates/partials/isRequired.hbs';
 import partialParameters from '../templates/partials/parameters.hbs';
 import partialResult from '../templates/partials/result.hbs';
+import partialResultWithCode from '../templates/partials/resultWithCode.hbs';
 import partialSchema from '../templates/partials/schema.hbs';
 import partialSchemaArray from '../templates/partials/schemaArray.hbs';
 import partialSchemaComposition from '../templates/partials/schemaComposition.hbs';
@@ -74,6 +77,7 @@ import partialSchemaDictionary from '../templates/partials/schemaDictionary.hbs'
 import partialSchemaEnum from '../templates/partials/schemaEnum.hbs';
 import partialSchemaGeneric from '../templates/partials/schemaGeneric.hbs';
 import partialSchemaInterface from '../templates/partials/schemaInterface.hbs';
+import partialServerParameters from '../templates/partials/serverParameters.hbs';
 import partialType from '../templates/partials/type.hbs';
 import partialTypeArray from '../templates/partials/typeArray.hbs';
 import partialTypeDictionary from '../templates/partials/typeDictionary.hbs';
@@ -92,6 +96,7 @@ export interface Templates {
         model: Handlebars.TemplateDelegate;
         schema: Handlebars.TemplateDelegate;
         service: Handlebars.TemplateDelegate;
+        serverStub: Handlebars.TemplateDelegate;
     };
     core: {
         settings: Handlebars.TemplateDelegate;
@@ -124,6 +129,7 @@ export const registerHandlebarTemplates = (root: {
             model: Handlebars.template(templateExportModel),
             schema: Handlebars.template(templateExportSchema),
             service: Handlebars.template(templateExportService),
+            serverStub: Handlebars.template(templateExportServerStub),
         },
         core: {
             settings: Handlebars.template(templateCoreSettings),
@@ -142,12 +148,14 @@ export const registerHandlebarTemplates = (root: {
     Handlebars.registerPartial('exportInterface', Handlebars.template(partialExportInterface));
     Handlebars.registerPartial('exportComposition', Handlebars.template(partialExportComposition));
     Handlebars.registerPartial('exportType', Handlebars.template(partialExportType));
+    Handlebars.registerPartial('getParamFromReq', Handlebars.template(partialGetParamFromReq));
     Handlebars.registerPartial('header', Handlebars.template(partialHeader));
     Handlebars.registerPartial('isNullable', Handlebars.template(partialIsNullable));
     Handlebars.registerPartial('isReadOnly', Handlebars.template(partialIsReadOnly));
     Handlebars.registerPartial('isRequired', Handlebars.template(partialIsRequired));
     Handlebars.registerPartial('parameters', Handlebars.template(partialParameters));
     Handlebars.registerPartial('result', Handlebars.template(partialResult));
+    Handlebars.registerPartial('resultWithCode', Handlebars.template(partialResultWithCode));
     Handlebars.registerPartial('schema', Handlebars.template(partialSchema));
     Handlebars.registerPartial('schemaArray', Handlebars.template(partialSchemaArray));
     Handlebars.registerPartial('schemaDictionary', Handlebars.template(partialSchemaDictionary));
@@ -155,6 +163,7 @@ export const registerHandlebarTemplates = (root: {
     Handlebars.registerPartial('schemaGeneric', Handlebars.template(partialSchemaGeneric));
     Handlebars.registerPartial('schemaInterface', Handlebars.template(partialSchemaInterface));
     Handlebars.registerPartial('schemaComposition', Handlebars.template(partialSchemaComposition));
+    Handlebars.registerPartial('serverParameters', Handlebars.template(partialServerParameters));
     Handlebars.registerPartial('type', Handlebars.template(partialType));
     Handlebars.registerPartial('typeArray', Handlebars.template(partialTypeArray));
     Handlebars.registerPartial('typeDictionary', Handlebars.template(partialTypeDictionary));

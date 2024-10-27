@@ -45,3 +45,11 @@ export { {{{name}}}{{{@root.postfixServices}}} } from './services/{{{name}}}{{{@
 {{/each}}
 {{/if}}
 {{/if}}
+{{#if @root.exportServerStubs}}
+{{#if services}}
+
+{{#each services}}
+export { {{{name}}}{{{@root.postfixServerStubs}}} } from './server_stubs/{{{name}}}{{{@root.postfixServerStubs}}}';
+{{/each}}
+{{/if}}
+{{/if}}

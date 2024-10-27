@@ -26,6 +26,7 @@ describe('writeClientCore', () => {
                 model: () => 'model',
                 schema: () => 'schema',
                 service: () => 'service',
+                serverStub: () => 'serverStub',
             },
             core: {
                 settings: () => 'settings',

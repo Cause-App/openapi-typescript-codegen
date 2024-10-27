@@ -19,6 +19,7 @@ import { sortServicesByName } from './sortServicesByName';
  * @param exportServices Generate services
  * @param exportModels Generate models
  * @param exportSchemas Generate schemas
+ * @param exportServerStubs Generate server stubs
  * @param postfixServices Service name postfix
  * @param postfixModels Model name postfix
  * @param clientName Custom client class name
@@ -32,8 +33,10 @@ export const writeClientIndex = async (
     exportServices: boolean,
     exportModels: boolean,
     exportSchemas: boolean,
+    exportServerStubs: boolean,
     postfixServices: string,
     postfixModels: string,
+    postfixServerStubs: string,
     clientName?: string
 ): Promise<void> => {
     const templateResult = templates.index({
@@ -41,9 +44,11 @@ export const writeClientIndex = async (
         exportServices,
         exportModels,
         exportSchemas,
+        exportServerStubs,
         useUnionTypes,
         postfixServices,
         postfixModels,
+        postfixServerStubs,
         clientName,
         server: client.server,
         version: client.version,

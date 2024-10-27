@@ -1,0 +1,29 @@
+const {{{name}}} = ({{#unless isRequired}}req.
+{{~#equals in "path"~}}
+params
+{{~else equals in "cookie"~}}
+cookies
+{{~else equals in "header"~}}
+headers
+{{~else equals in "query"~}}
+query
+{{~else equals in "formData"~}}
+body
+{{~else equals in "body"~}}
+body
+{{~/equals~}}
+['{{{prop}}}'] ? {{/unless}}{{#equals type "number"}}+({{/equals}}req.
+{{~#equals in "path"~}}
+params
+{{~else equals in "cookie"~}}
+cookies
+{{~else equals in "header"~}}
+headers
+{{~else equals in "query"~}}
+query
+{{~else equals in "formData"~}}
+body
+{{~else equals in "body"~}}
+body
+{{~/equals~}}
+['{{{prop}}}']{{#equals type "number"}} as string){{else equals type "boolean"}} === "true"{{else}} as {{>type}}{{/equals}}{{#unless isRequired}} : undefined{{/unless}});

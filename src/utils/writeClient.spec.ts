@@ -23,6 +23,7 @@ describe('writeClient', () => {
                 model: () => 'model',
                 schema: () => 'schema',
                 service: () => 'service',
+                serverStub: () => 'serverStub',
             },
             core: {
                 settings: () => 'settings',
@@ -47,9 +48,11 @@ describe('writeClient', () => {
             true,
             true,
             true,
+            false,
             Indent.SPACE_4,
             'Service',
-            'AppClient'
+            'AppClient',
+            'Server'
         );
 
         expect(rmdir).toBeCalled();

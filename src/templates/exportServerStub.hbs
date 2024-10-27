@@ -1,0 +1,128 @@
+{{>header}}
+
+import { type Request, type Response, Router } from 'express';
+
+{{#if imports}}
+{{#each imports}}
+import type { {{{this}}} } from '../models/{{{this}}}';
+{{/each}}
+{{/if}}
+
+export interface {{{name}}}{{{@root.postfix}}}Impl {
+	{{#each operations}}
+	/**
+	{{#if deprecated}}
+	 * @deprecated
+	{{/if}}
+	{{#if summary}}
+	 * {{{escapeComment summary}}}
+	{{/if}}
+	{{#if description}}
+	 * {{{escapeComment description}}}
+	{{/if}}
+	{{#if parameters}}
+	{{#each parameters}}
+	 * @param {{{name}}} {{#if description}}{{{escapeComment description}}}{{/if}}
+	{{/each}}
+	{{/if}}
+	{{#each results}}
+	 * @returns {{{type}}} {{#if description}}{{{escapeComment description}}}{{/if}}
+	{{/each}}
+	 */
+	{{{name}}}?: ({{>serverParameters}}) => Promise<{{>resultWithCode}}>;
+	{{/each}}
+}
+
+export class {{{name}}}{{{@root.postfix}}} {
+	impl: {{{name}}}{{{@root.postfix}}}Impl
+	router: Router;
+	
+	constructor(impl: {{{name}}}{{{@root.postfix}}}Impl) {
+		this.impl = impl;
+		this.router = Router();
+		{{#each operations}}
+		this.router.
+		{{~#equals method "GET"~}}
+		get
+		{{~else equals method "HEAD"~}}
+		head
+		{{~else equals method "POST"~}}
+		post
+		{{~else equals method "PUT"~}}
+		put
+		{{~else equals method "DELETE"~}}
+		delete
+		{{~else equals method "OPTIONS"~}}
+		options
+		{{~else equals method "TRACE"~}}
+		trace
+		{{~else equals method "PATCH"~}}
+		patch
+		{{~/equals~}}
+		(toExpressRoute('{{{path}}}'), this.{{{name}}}.bind(this));
+		{{/each}}
+	}
+
+	{{#each operations}}
+	public async {{{name}}}(req: Request, res: Response): Promise<void> {
+		{{#if parametersPath}}
+		{{#each parametersPath}}
+		{{>getParamFromReq}}
+		
+		{{/each}}
+		{{/if}}
+		{{#if parametersCookie}}
+		{{#each parametersCookie}}
+		{{>getParamFromReq}}
+		
+		{{/each}}
+		{{/if}}
+		{{#if parametersHeader}}
+		{{#each parametersHeader}}
+		{{>getParamFromReq}}
+		
+		{{/each}}
+		{{/if}}
+		{{#if parametersQuery}}
+		{{#each parametersQuery}}
+		{{>getParamFromReq}}
+		
+		{{/each}}
+		{{/if}}
+		{{#if parametersForm}}
+		{{#each parametersForm}}
+		{{>getParamFromReq}}
+		
+		{{/each}}
+		{{/if}}
+		{{#if parametersBody}}
+		{{#with parametersBody}}
+		const {{{name}}} = req.body as {{>type}};
+		{{/with}}
+		{{/if}}
+		try {
+			if (this.impl.{{{name}}} === undefined) {
+				throw new Error('Not implemented');
+			} else {
+				const { code, data } = await this.impl.{{{name}}}(
+					{{#if parameters}}
+					{{#each parameters}}
+					{{{name}}},
+					{{/each}}
+					{{/if}}
+				);
+				res.status(code).json(data);
+			}
+		} catch (e) {
+			console.error(e);
+			res.status(500).send(`Error: ${e}`);
+		}
+	}
+
+	{{/each}}
+
+}
+
+function toExpressRoute(path: string): string {
+	return path.replace(/{([^}]*)}/g, ':$1');
+}

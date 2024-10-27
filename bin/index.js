@@ -20,8 +20,10 @@ const params = program
     .option('--exportServices <value>', 'Write services to disk', true)
     .option('--exportModels <value>', 'Write models to disk', true)
     .option('--exportSchemas <value>', 'Write schemas to disk', false)
+    .option('--exportServerStubs <value>', 'Write server stubs to disk', false)
     .option('--indent <value>', 'Indentation options [4, 2, tabs]', '4')
     .option('--postfixServices <value>', 'Service name postfix', 'Service')
+    .option('--postfixServerStubs <value>', 'Server stub name postfix', 'Server')
     .option('--postfixModels <value>', 'Model name postfix')
     .option('--request <value>', 'Path to custom request file')
     .parse(process.argv)
@@ -41,9 +43,11 @@ if (OpenAPI) {
         exportServices: JSON.parse(params.exportServices) === true,
         exportModels: JSON.parse(params.exportModels) === true,
         exportSchemas: JSON.parse(params.exportSchemas) === true,
+        exportServerStubs: JSON.parse(params.exportServerStubs) === true,
         indent: params.indent,
         postfixServices: params.postfixServices,
         postfixModels: params.postfixModels,
+        postfixServerStubs: params.postfixServerStubs,
         request: params.request,
     })
         .then(() => {

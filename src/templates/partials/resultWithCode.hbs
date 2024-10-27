@@ -1,0 +1,5 @@
+{{~#if results~}}
+{{#each results}}{ code: {{{code}}}, data: {{>type}} }{{#unless @last}} | {{/unless}}{{/each}}
+{{~else~}}
+void
+{{~/if~}}

@@ -12,6 +12,7 @@ import { writeClientCore } from './writeClientCore';
 import { writeClientIndex } from './writeClientIndex';
 import { writeClientModels } from './writeClientModels';
 import { writeClientSchemas } from './writeClientSchemas';
+import { writeClientServerStubs } from './writeClientServerStubs';
 import { writeClientServices } from './writeClientServices';
 
 /**
@@ -44,9 +45,11 @@ export const writeClient = async (
     exportServices: boolean,
     exportModels: boolean,
     exportSchemas: boolean,
+    exportServerStubs: boolean,
     indent: Indent,
     postfixServices: string,
     postfixModels: string,
+    postfixServerStubs: string,
     clientName?: string,
     request?: string
 ): Promise<void> => {
@@ -55,6 +58,7 @@ export const writeClient = async (
     const outputPathModels = resolve(outputPath, 'models');
     const outputPathSchemas = resolve(outputPath, 'schemas');
     const outputPathServices = resolve(outputPath, 'services');
+    const outputPathServerStubs = resolve(outputPath, 'server_stubs');
 
     if (!isSubDirectory(process.cwd(), output)) {
         throw new Error(`Output folder is not a subdirectory of the current working directory`);
@@ -94,6 +98,19 @@ export const writeClient = async (
         await writeClientModels(client.models, templates, outputPathModels, httpClient, useUnionTypes, indent);
     }
 
+    if (exportServerStubs) {
+        await rmdir(outputPathServerStubs);
+        await mkdir(outputPathServerStubs);
+        await writeClientServerStubs(
+            client.services,
+            templates,
+            outputPathServerStubs,
+            indent,
+            postfixServerStubs,
+            clientName
+        );
+    }
+
     if (isDefined(clientName)) {
         await mkdir(outputPath);
         await writeClientClass(client, templates, outputPath, httpClient, clientName, indent, postfixServices);
@@ -110,8 +127,10 @@ export const writeClient = async (
             exportServices,
             exportModels,
             exportSchemas,
+            exportServerStubs,
             postfixServices,
             postfixModels,
+            postfixServerStubs,
             clientName
         );
     }
